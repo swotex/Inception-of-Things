@@ -1,0 +1,48 @@
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    config.vm.box = "centos65"
+  
+    config.ssh.forward_agent = true
+    config.vm.synced_folder "./shareData", "/vagrant_data"
+
+    config.vm.define "njegatS" do |njegatS_config|
+        njegatS_config.vm.hostname = "njegatS"
+        njegatS_config.vm.network :private_network, ip: "192.168.56.110"
+
+        njegatS_config.vm.provider :virtualbox do |vb|
+        vb.gui = false
+    
+        vb.customize [
+            'modifyvm', :id,
+            '--name', "njegatS",
+            '--memory', '512', # or 1024
+            '--cpus', '1'
+        ]
+
+        njegatS_config.vm.provision "shell", path: "./scripts/server.sh"
+    end
+
+
+    config.vm.define "njegatWS" do |njegatWS_config|
+        njegatWS_config.vm.hostname = "njegatWS"
+        njegatWS_config.vm.network :private_network, ip: "192.168.56.111"
+
+        njegatWS_config.vm.provider :virtualbox do |vb|
+        vb.gui = false
+    
+        vb.customize [
+            'modifyvm', :id,
+            '--name', "njegatWS",
+            '--memory', '512', # or 1024
+            '--cpus', '1'
+        ]
+
+        njegatWS_config.vm.provision "shell", path: "./scripts/server.sh"
+    end
+
+
+
+  
+  end
