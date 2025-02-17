@@ -39,7 +39,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             '--cpus', '1'
         ]
 
-        njegatWS_config.vm.provision "shell", path: "./scripts/server.sh"
+        njegatWS_config.vm.provision "shell", path: "./scripts/worker.sh"
     end
 
 
