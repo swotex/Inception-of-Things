@@ -2,10 +2,10 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-	config.vm.box = "alpine/alpine64"
+	config.vm.box = "generic/alpine319"
 
-	# config.ssh.forward_agent = true
-	# config.ssh.insert_key = false
+	config.ssh.forward_agent = true
+	config.ssh.insert_key = false
 	# config.ssh.private_key_path = "~/.ssh/id_ed25519"
 	config.vm.synced_folder "./shareData", "/vagrant_data"
 
@@ -15,34 +15,40 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 		njegatS_config.vm.provider :virtualbox do |vb|
 			vb.gui = false
+
+			vb.memory = "512"
+			vb.cpus = "1"
 		
-			vb.customize [
-				'modifyvm', :id,
-				'--name', "njegatS",
-				'--memory', '512', # or 1024
-				'--cpus', '1'
-			]
+			# vb.customize [
+			# 	'modifyvm', :id,
+			# 	'--name', "njegatS",
+			# 	'--memory', '512', # or 1024
+			# 	'--cpus', '1'
+			# ]
 		end
 
 		njegatS_config.vm.provision "shell", path: "./scripts/server.sh"
 	end
 
 
-	config.vm.define "njegatWS" do |njegatWS_config|
-		njegatWS_config.vm.hostname = "njegatWS"
-		njegatWS_config.vm.network :private_network, ip: "192.168.56.111"
+	config.vm.define "njegatSW" do |njegatSW_config|
+		njegatSW_config.vm.hostname = "njegatSW"
+		njegatSW_config.vm.network :private_network, ip: "192.168.56.111"
 
-		njegatWS_config.vm.provider :virtualbox do |vb|
+		njegatSW_config.vm.provider :virtualbox do |vb|
 			vb.gui = false
+
+			vb.memory = "512"
+			vb.cpus = "1"
 		
-			vb.customize [
-				'modifyvm', :id,
-				'--name', "njegatWS",
-				'--memory', '512', # or 1024
-				'--cpus', '1'
-			]
+			# vb.customize [
+			# 	'modifyvm', :id,
+			# 	'--name', "njegatWS",
+			# 	'--memory', '512', # or 1024
+			# 	'--cpus', '1'
+			# ]
 		end
 
-		njegatWS_config.vm.provision "shell", path: "./scripts/worker.sh"
+		njegatSW_config.vm.provision "shell", path: "./scripts/worker.sh"
 	end
 end
